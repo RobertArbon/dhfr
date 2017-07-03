@@ -5,16 +5,18 @@ from simtk.openmm import app
 import simtk.openmm as mm
 from simtk import unit
 
-if len(sys.argv) != 6:
-    print('usage %s <cuda device index> < temp K > < t_equil ns > < t_sim ns > < fric 1/ps > ')
+if len(sys.argv) != 8:
+    print('usage %s <cuda device index> < temp K > < t_equil ns > < t_sim ns > < fric 1/ps > < pdb > < frame > ')
     exit(1)
 
 temp = float(sys.argv[2])
 t_equil = int(sys.argv[3])
 t_sim = int(sys.argv[4])
 fric = float(sys.argv[5])
+pdb_str = sys.argv[6]
+pdb_frame = int(sys.argv[7])
 
-pdb = md.load('5dfr_minimized.pdb')
+pdb = md.load(pdb_str)
 forcefield = app.ForceField('amber99sbildn.xml', 'amber99_obc.xml')
 
 system = forcefield.createSystem(pdb.topology.to_openmm(), nonbondedMethod=app.CutoffNonPeriodic,
@@ -26,7 +28,7 @@ integrator.setConstraintTolerance(0.00001)
 platform = mm.Platform.getPlatformByName('CUDA')
 properties = {'CudaPrecision': 'mixed', 'CudaDeviceIndex': sys.argv[1]}
 simulation = app.Simulation(pdb.topology.to_openmm(), system, integrator, platform, properties)
-simulation.context.setPositions(pdb.xyz[0])
+simulation.context.setPositions(pdb.xyz[pdb_frame])
 
 simulation.context.setVelocitiesToTemperature(temp*unit.kelvin)
 
