@@ -10,8 +10,8 @@ if len(sys.argv) != 8:
     exit(1)
 
 temp = float(sys.argv[2])
-t_equil = int(sys.argv[3])
-t_sim = int(sys.argv[4])
+t_equil = float(sys.argv[3])
+t_sim = float(sys.argv[4])
 fric = float(sys.argv[5])
 pdb_str = sys.argv[6]
 pdb_frame = int(sys.argv[7])
