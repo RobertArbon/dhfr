@@ -35,7 +35,7 @@ simulation.context.setVelocitiesToTemperature(temp*unit.kelvin)
 nsteps = int((t_sim*unit.nanoseconds) / (2*unit.femtoseconds))
 interval = int((1*unit.nanoseconds) / (2*unit.femtoseconds))
 
-simulation.reporters.append(app.StateDataReporter(open('trajectory-%sK.log' % sys.argv[2], 'w'),
+simulation.reporters.append(app.StateDataReporter(open('trajectory-{0}K-{1}.log'.format(sys.argv[2], pdb_frame), 'w'),
     interval, step=True, time=True, progress=True,
     potentialEnergy=True, temperature=True, remainingTime=True,
     speed=True, totalSteps=nsteps, separator='\t'))
@@ -44,5 +44,5 @@ simulation.reporters.append(app.StateDataReporter(open('trajectory-%sK.log' % sy
 simulation.step(int(t_equil*unit.nanoseconds / (2*unit.femtoseconds)))
 
 # now add the trajectory reporter.
-simulation.reporters.append(app.PDBReporter('5dfr-trajectory-%sK.pdb' % sys.argv[2], interval))
+simulation.reporters.append(app.DCDReporter('5dfr-trajectory-{0}K-{1}.dcd'.format(sys.argv[2],pdb_frame), interval))
 simulation.step(nsteps)

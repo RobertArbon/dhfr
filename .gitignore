@@ -60,3 +60,7 @@ target/
 \.idea/
 *.pdb
 *.tar
+*.log
+*.out
+*.dcd
+/round_*/
